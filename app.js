@@ -1,6 +1,8 @@
 var path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
+var fs = require("fs");
+const https = require("https");
 const app = express();
 
 ////App Config
@@ -22,9 +24,16 @@ var indexRouter = require("./routers/index");
 app.use('/', indexRouter);
 
 ////server
-var server = app.listen(3000, function()  {
+https.createServer({
+    key: fs.readFileSync("server.key"),
+    cert: fs.readFileSync("server.cert")
+}, app)
+.listen(3000, function()    {
+    console.log("Server listening on port 3000")
+});
+/*var server = app.listen(3000, function()  {
     var host = server.address().adress;
     var port = server.address().port;
 
     console.log("Server listening at http://%s:%s", host, port);
-});
+});*/
